@@ -102,3 +102,60 @@ let totalSum = arr.myReduce((a, b) => {
   return a + b;
 }, 0);
 console.log(totalSum);
+
+
+// Polyfill for 'call'
+Function.prototype.customCall = function(obj, ...args) {
+  obj.fnRef = this;
+  obj.fnRef(...args);
+}
+
+const food = {
+  name : 'Break and Butter'
+}
+
+function eat(param1, param2) {
+  console.log(`${this.name} is ${param1} for ${param2}.`)
+}
+
+eat.call(food, 'good', 'health');
+eat.customCall(food, 'good', 'health')
+
+
+// Polyfill for 'apply'
+Function.prototype.customApply = function(obj, args) {
+  obj.fnRef = this;
+  obj.fnRef(...args);
+}
+
+var obj = {
+  first : "Sohan"
+}
+
+function say(param1, param2) {
+  console.log(`${this.first} is a ${param1}. He lives in ${param2}`)
+}
+
+say.apply(obj, ['boy', 'India'])
+say.customApply(obj, ['boy', 'India'])
+
+
+
+// Polyfill for 'bind'
+Function.prototype.customBind = function(obj) {
+  obj.fnRef = this;
+  return function (...args) {
+      obj.fnRef(...args);
+  }
+}
+
+const obj1 = {
+  name : "Manish"
+}
+
+function showName() {
+  console.log(this.name)
+}
+
+let bindfn = showName.customBind(obj1);
+bindfn()
